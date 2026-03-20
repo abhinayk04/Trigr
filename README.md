@@ -1,827 +1,711 @@
-# Trigr 🛵⚡
-### *When disruptions stop your deliveries, we start your payout.*
+# Trigr ⚡
+### Parametric Income Insurance for India's Food Delivery Partners
 
-> **Guidewire DEVTrails 2026** | AI-Powered Parametric Income Insurance for India's Food Delivery Partners
-> Persona: Zomato / Swiggy | Platform: Web App
-
----
-
-## The Problem Nobody Is Solving
-
-India has over 5 million food delivery partners working for Zomato and Swiggy. On a good day, a partner in Hyderabad earns ₹800–₹1,200. On a day when a storm hits, or the AQI crosses 250, or a sudden curfew is declared, or a local bandh shuts the streets? They earn nothing.
-
-Heavy rain slows orders. Extreme heat makes outdoor work unsafe. Severe pollution forces workers off the road. A flood blocks every route. A curfew or local strike brings deliveries to a complete halt.
-
-These are not rare events — they are the lived reality of every gig worker in India. A disruption week can erase 30-40% of a Zomato partner's monthly income. And when it happens, they have absolutely nothing to fall back on. No sick leave. No employer liability. No safety net.
-
-**Trigr changes that.**
-
-We are building an AI-powered parametric insurance platform that monitors real-world disruptions in real time — weather, pollution, floods, curfews, and strikes — and when a trigger fires, sends the payout automatically. No claim form. No waiting. No friction.
+> **Guidewire DEVTrails 2026** — AI-Powered Parametric Insurance Platform
+> Persona: Food Delivery (Zomato / Swiggy) | Platform: Web Application
 
 ---
 
-## 📌 Table of Contents
-
-1. [Why Food Delivery, Why Now](#1-why-food-delivery-why-now)
-2. [How Trigr Works — The Big Picture](#2-how-gigshield-works--the-big-picture)
-3. [Persona Scenarios & Workflow](#3-persona-scenarios--workflow)
-4. [Weekly Premium Model & Parametric Triggers](#4-weekly-premium-model--parametric-triggers)
-5. [AI/ML Architecture](#5-aiml-architecture)
-6. [Fraud Detection & Anti-Spoofing Strategy](#6-fraud-detection--anti-spoofing-strategy)
-7. [Risk Scoring & Pricing Engine](#7-risk-scoring--pricing-engine)
-8. [Tech Stack & System Design](#8-tech-stack--system-design)
-9. [Development Roadmap](#9-development-roadmap)
-10. [Team](#10-team)
+*When disruptions stop your deliveries, we start your payout.*
 
 ---
 
-## 1. Why Food Delivery, Why Now
+## The Problem
 
-### Food Delivery Partners Are the Most Disruption-Exposed Gig Workers in India
+Every morning, millions of food delivery partners across India log onto Zomato or Swiggy with one goal — earn enough to get through the week. They are not employees. There is no salary, no sick leave, no employer liability. Their income is entirely tied to the number of orders they complete.
 
-Unlike e-commerce delivery (longer windows, some indoor time) or grocery Q-commerce (hyper-local, indoor dark store access), food delivery is entirely real-time, entirely outdoor, and entirely dependent on weather.
+Now imagine it starts raining heavily at 2 PM on a Wednesday — the middle of peak lunch hour. Orders stop coming. Customers cancel. The roads become unsafe. A partner who would have earned ₹400 in those three hours earns almost nothing. That loss is permanent. No one compensates them for it. No one even acknowledges it happened.
 
-A Zomato partner cannot delay an order by 3 hours. They cannot wait out a storm in a warehouse. They are on a bike, in the rain, against the clock — or they are earning nothing.
+This is not a rare edge case. Disruptions — heavy rain, extreme heat, severe pollution, floods, sudden curfews — hit Indian cities regularly and predictably. The income loss is real, measurable, and currently uninsured.
 
-| Factor | E-Commerce Delivery | Grocery / Q-Commerce | **Food Delivery (Zomato/Swiggy)** |
+**Trigr is built to fix that.**
+
+---
+
+## What Trigr Does
+
+Trigr monitors real-world disruption events continuously across delivery zones. When a qualifying event occurs — rainfall crossing a threshold, AQI spiking, a flood alert activating — the system identifies which enrolled workers were active in the affected area, runs a fraud check, calculates how much income they likely lost, and transfers a proportional payout to their UPI account. Automatically. Without the worker filing anything.
+
+This is parametric insurance. The trigger is the claim. The data does the work.
+
+---
+
+## Table of Contents
+
+1. [Why Food Delivery](#1-why-food-delivery)
+2. [How It Works](#2-how-it-works)
+3. [Real Worker Scenarios](#3-real-worker-scenarios)
+4. [Triggers and Premium Model](#4-triggers-and-premium-model)
+5. [AI and ML Architecture](#5-ai-and-ml-architecture)
+6. [Fraud Detection — The Work Trail Protocol](#6-fraud-detection--the-work-trail-protocol)
+7. [Market Crash Defense](#7-market-crash-defense)
+8. [Risk Scoring and Pricing Engine](#8-risk-scoring-and-pricing-engine)
+9. [Tech Stack](#9-tech-stack)
+10. [Development Roadmap](#10-development-roadmap)
+
+---
+
+## 1. Why Food Delivery
+
+Among all gig delivery segments in India, food delivery partners carry the highest income risk during disruptions. The reason is structural, not coincidental.
+
+An e-commerce partner delivering a package from Amazon has a delivery window measured in hours — sometimes days. If it rains, they can pause and resume. A grocery partner on Zepto or Blinkit operates hyper-locally and can shelter nearby. A food delivery partner on Zomato or Swiggy has a 30–45 minute window to pick up a hot meal and deliver it. There is no pausing, no rescheduling, no indoor fallback. When a storm hits, the order cancels, the income disappears, and the partner has no recourse.
+
+This is why food delivery is the right starting persona for a parametric income product. The disruption is sharp, the income loss is immediate, and the triggers are measurable from external data sources that no worker can manipulate.
+
+| Factor | E-Commerce | Grocery Q-Commerce | Food Delivery |
 |---|---|---|---|
 | Delivery window | Hours to days | 10–20 minutes | 30–45 minutes |
-| Weather sensitivity | Low–Moderate | Moderate | **High** |
-| Peak hour dependency | Low | Moderate | **Critical** |
-| Income drop during disruption | 10–15% | 20–25% | **30–40%** |
-| Daily earnings (Tier 1 city) | ₹700–₹1,000 | ₹600–₹900 | **₹900–₹1,500** |
+| Weather sensitivity | Low | Moderate | High |
+| Peak hour dependency | Low | Moderate | Critical |
+| Income loss on disruption day | 10–15% | 20–25% | 30–40% |
+| Order deferral flexibility | High | Low | None |
 
-This is why food delivery is the right first persona. The income loss is significant, the disruption triggers are measurable, and the urgency of payout is real.
+Income also varies significantly by city. A partner in Bengaluru earns more per day than one in Vijayawada, but the Vijayawada partner has far less financial buffer when things go wrong. Trigr accounts for both — higher-income cities are charged at standard rates while Tier 2 and Tier 3 cities receive a community discount built into the premium.
 
-### City-Tier Reality
-
-Income and disruption impact are not uniform across India. Trigr accounts for where a partner works:
-
-| City Tier | Examples | Daily Income (Normal Day) | Income Loss During Disruption |
+| City Tier | Examples | Normal Daily Income | Income Loss During Disruption |
 |---|---|---|---|
-| Tier 1 (Metro) | Bengaluru, Hyderabad | ₹900–₹1,500 (20–30 orders) | 30–40% |
-| Tier 2 | Vijayawada, Vizag | ₹600–₹1,000 (15–22 orders) | 25–30% |
-| Tier 3 | Smaller cities | ₹300–₹700 (8–15 orders) | 20–25% |
-
-> A key insight: higher-tier cities have more income at stake, but Tier 3 workers are more financially vulnerable because they have far less buffer.
+| Tier 1 | Bengaluru, Hyderabad | ₹900–₹1,500 | 30–40% |
+| Tier 2 | Vijayawada, Vizag | ₹600–₹1,000 | 25–30% |
+| Tier 3 | Smaller cities | ₹300–₹700 | 20–25% |
 
 ---
 
-## 2. How Trigr Works — The Big Picture
+## 2. How It Works
 
-Trigr is built on a simple but powerful principle: **parametric insurance**. Instead of asking a worker to prove their loss, the system watches the world for them.
-
-When rainfall exceeds our threshold in a worker's zone, a trigger fires. The system checks whether the worker was active, validates against fraud signals, and releases a payout — directly to their UPI ID. No claim form. No waiting. No friction.
+The system runs a continuous monitoring loop across all enrolled delivery zones. Every 15 minutes it checks weather conditions, AQI readings, flood alerts, and any admin-verified social events. When a condition crosses a defined threshold, the disruption engine activates.
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    WORKER JOURNEY                               │
-│─────────────────────────────────────────────────────────────────│
-│  [Every Monday]  Worker opts into weekly coverage               │
-│       ↓                                                         │
-│  Premium calculated (based on zone risk, history, forecast)     │
-│       ↓                                                         │
-│  [During Week]  Trigger Monitor checks every 15 minutes         │
-│  Weather API + AQI API + Admin Panel (for curfew/strike)        │
-│       ↓                                                         │
-│  Disruption detected → Severity assessed → Location validated   │
-│       ↓                                                         │
-│  Fraud Engine runs multi-layer check                            │
-│       ↓                            ↓                            │
-│  Risk Score < 30 → Auto-approve    Risk Score > 65 → Freeze     │
-│       ↓                                                         │
-│  Payout calculated (based on affected hours + severity)         │
-│  UPI transfer → Worker notified via app/SMS                     │
-└─────────────────────────────────────────────────────────────────┘
+Worker enrolls on Monday
+Premium deducted, coverage active until Sunday night
+
+     |
+     |  Every 15 minutes
+     |  Trigger monitor checks each zone
+     |  Weather API + AQI API + Flood alerts + Admin panel
+     |
+     |  Disruption detected → Severity assessed
+     |  Worker location cross-checked with affected zone
+     |
+     |  Work Trail Protocol runs — 2-dimension individual check + zone check
+     |
+     |  TDS = 0.0                         → Hard reject (no further evaluation)
+     |  ZCS < 0.2                         → Zone freeze (ring attack)
+     |  IAS >= 0.65 AND ZCS >= 0.5        → Auto-approved, UPI within 24 hours
+     |  IAS >= 0.35 OR  ZCS >= 0.2        → OTP verify, resolved in 24–48 hours
+     |  Otherwise                         → Frozen, appeal token by SMS
+     |
+     |  Payout = (DWI / 7) × (affected hours / 9) × Severity Factor × Coverage Rate
+     |
+     Worker receives UPI notification
 ```
 
----
-
-## 3. Persona Scenarios & Workflow
-
-### Understanding Our Two Core Personas
-
-**Persona A — The Normal Day (Rajan, Zomato, Bengaluru)**
-
-Rajan works 8 hours a day in Indiranagar. He earns roughly ₹100/hour — about ₹800 for a full day. He accepts orders, picks up food from restaurants, and delivers to customers in a defined zone. His earnings come from per-order pay, distance-based pay, and surge pricing during peak hours (lunch: 12–2 PM, dinner: 7–9 PM).
-
-Trigr tracks Rajan's expected income baseline using his last-4-week average earnings, his declared working hours, and his operating zone's historical activity patterns.
-
-**Persona B — The Disrupted Day (Rajan, same city, bad Tuesday)**
-
-Rainfall hits 18mm/hr at 2 PM — right in the middle of peak earning hours. Road speeds drop. Restaurant pickup times double. Customers cancel. But it's not always rain. Some days it's a heat wave pushing 43°C that makes riding unsafe. Other days it's an AQI alert that keeps customers indoors. Occasionally it's a local strike that shuts down the entire zone.
-
-Whatever the disruption, the result is the same: Rajan's order count falls from his average of 5 per hour to 1 — or zero.
-
-Trigr detects: rainfall threshold crossed ✅, continuous for 2+ hours ✅, Rajan's GPS is in his declared zone ✅, his account has been active today ✅.
-
-**Result:** Fraud score = Low. Payout automatically calculated and sent to his UPI. Trigr covers the income gap — whatever caused it.
+No claim form. No waiting. No friction.
 
 ---
 
-### Scenario A — The 3 PM Monsoon Halt, Hyderabad
+## 3. Real Worker Scenarios
 
-**Meera**, Swiggy partner, Banjara Hills. Thursday, 3:00 PM.
+### Scenario A — Heavy Rain in Hyderabad
 
-Rainfall crosses 22mm/hr. Trigr's continuous trigger activates (rain above threshold for 2+ hours). Meera has been online since 10 AM — her activity log is clean.
+Meera is a Swiggy partner operating in Banjara Hills. It is Thursday afternoon. Rainfall crosses 22mm per hour and stays above the threshold for two continuous hours. Trigr's trigger engine activates.
 
-- Trigger threshold crossed ✅
-- Continuous rain validated for 2 hours ✅
-- Meera's GPS matches her declared delivery zone ✅
-- No fraud signals detected ✅
+The system checks Meera's GPS log against the disruption zone — she is in the right area. Her activity log shows she has been online since 10 AM with 6 order completions and active map interactions. Work Trail scores: TDS = 1.0, TTI = 1.0, IAS = 1.0. Zone coherent, ZCS = 0.87. Auto-approved.
 
-**Result:** Payout = ₹350 (3 disrupted hours × expected hourly income × severity factor). Sent to UPI within 22 hours. Meera didn't file anything.
+Her payout — approximately ₹350 — arrives in her UPI account within 24 hours. She did not file anything.
 
 ---
 
-### Scenario B — The Delhi AQI Shutdown
+### Scenario B — AQI Shutdown in Delhi
 
-**Arjun**, Zomato partner, Dwarka, Delhi. November, 8 AM.
+Arjun is a Zomato partner in Dwarka, Delhi. In November, the AQI crosses 260 and stays there for six hours, crossing Trigr's medium severity threshold.
 
-AQI crosses 260. Health risk makes extended outdoor work unsafe. Arjun has been logged in, but platform activity shows a visible slowdown.
-
-- AQI trigger crosses 250 threshold ✅
-- Continuous for 6+ hours ✅
-- Arjun is in his declared operating zone ✅
-
-**Result:** Medium severity payout (50% income loss rate) for the disrupted hours. Arjun's weekly premium was ₹68 — this week, Trigr covers what Delhi's air quality took from him.
+The system confirms Arjun was in his declared operating zone, the trigger is valid, and his account shows normal activity patterns across the prior week. IAS = 0.91, ZCS = 0.83. Auto-approved. His weekly premium was ₹68. The payout he receives that week is proportionally larger — that is the point of insurance.
 
 ---
 
-### Scenario C — The Curfew (Social Disruption)
+### Scenario C — Curfew in Vijayawada
 
-**Priya**, Zomato partner, Vijayawada. An unplanned curfew is declared at 6 PM.
+Priya is a Zomato partner in Vijayawada. An unplanned curfew is declared at 6 PM. An admin marks the affected zone as curfew-active on the dashboard. The system checks whether Priya was working in that zone before the curfew was imposed and calculates hours of income lost after it was declared.
 
-Unlike weather, curfews don't have a real-time API. Trigr handles this through an **admin-verified trigger** — an admin marks the affected city/zone as curfew-active on the dashboard. The system then cross-validates: is Priya active in that zone? Was she working in those hours?
-
-- Curfew = TRUE, zone confirmed ✅
-- Priya's activity log confirms she was active before the curfew ✅
-- Disruption hours = 6 PM to declared end of working day ✅
-
-**Result:** 100% income loss rate for the curfew duration. Instant trigger. Payout = full estimated earnings for those hours.
+Curfews and local strikes are **secondary triggers** — they pay at 50% of calculated daily loss, funded from a dedicated reserve pool made up of 3% of all premiums collected, keeping the main insurance pool stable.
 
 ---
 
-### Full Application Workflow
+## 4. Triggers and Premium Model
 
-```
-╔═══════════════════════════════════════════════════════════════╗
-║                    WORKER ONBOARDING                          ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Register → Verify phone → Declare zone + weekly hours        ║
-║  Platform income verified via API (or self-declared × 0.8)   ║
-║  Weekly opt-in every Monday → Premium auto-deducted           ║
-╠═══════════════════════════════════════════════════════════════╣
-║                    TRIGGER MONITORING                         ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Every 15 minutes per zone:                                   ║
-║  OpenWeatherMap API → Rainfall, Temperature                   ║
-║  AQI API (AQICN / OpenWeather Air) → AQI reading              ║
-║  Admin Panel → Curfew / Strike status                         ║
-║  IMD alerts → Flood advisory (Red/Orange/Green)               ║
-╠═══════════════════════════════════════════════════════════════╣
-║                    TRIGGER ACTIVATED                          ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Severity assigned (Low / Medium / High / Extreme)            ║
-║  Trigger type checked (Instant vs. Continuous)                ║
-║  Location validated: worker must be in affected zone          ║
-║  Time validated: must be within active working hours          ║
-╠═══════════════════════════════════════════════════════════════╣
-║                    FRAUD ENGINE                               ║
-╠═══════════════════════════════════════════════════════════════╣
-║  5-layer fraud check runs in parallel:                        ║
-║  GPS integrity + Network anchoring + Device fingerprint       ║
-║  Behavioral baseline + Cluster detection                      ║
-║  Risk Score calculated (0–100)                                ║
-╠═══════════════════════════════════════════════════════════════╣
-║                    PAYOUT DECISION                            ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Score 0–30  → Auto-approved, UPI in 22 hours                 ║
-║  Score 31–65 → Held for OTP / identity verification           ║
-║  Score 66+   → Frozen, manual review, appeal path open        ║
-╠═══════════════════════════════════════════════════════════════╣
-║                    INSURER DASHBOARD                          ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Active policies by zone → Live trigger feed                  ║
-║  Loss ratio analytics → Fraud alert centre                    ║
-║  7-day weather exposure forecast → Zone risk heatmap          ║
-╚═══════════════════════════════════════════════════════════════╝
-```
+### Primary Triggers — Automated, Real-Time
 
----
+Monitored continuously from external APIs. Pay at **70% of calculated daily loss**.
 
-## 4. Weekly Premium Model & Parametric Triggers
+| Trigger | Threshold | Activation Type | Data Source |
+|---|---|---|---|
+| Heavy rain | Above 5mm/hr (low) or above 15mm/hr (high) | Continuous — must persist 2+ hours | OpenWeatherMap API |
+| Extreme heat | Above 38°C (low) or above 42°C (high) | Continuous — must persist 2+ hours | OpenWeatherMap API |
+| Severe AQI | Above 150 (medium) or above 250 (high) | Continuous — must persist 2+ hours | AQICN / OpenWeather Air |
+| Flood alert | IMD flood advisory active | Instant | IMD / NDMA (simulated Phase 1) |
 
-### Why Weekly?
+The continuous requirement prevents payouts from short spikes. A 10-minute rainfall burst does not meaningfully disrupt a delivery partner's income. Two hours does.
 
-Food delivery workers live week to week. A daily premium feels like a hidden tax they can't control. A monthly premium is a large upfront commitment they can't afford. Weekly is the natural rhythm — just like their earnings, just like their expenses.
+### Secondary Triggers — Admin-Verified
 
-Trigr's weekly opt-in model lets workers skip a week with no penalty. No lock-in. No fine print. They pay ₹X on Monday morning, and from that moment until Sunday night, they are covered.
+Activate only after a human admin confirms the event. Pay at **50% of calculated daily loss**.
 
----
-
-### The 6 Parametric Triggers
-
-| # | Trigger | Threshold | Trigger Type | Data Source | Severity |
-|---|---|---|---|---|---|
-| 1 | **Heavy Rain** | > 5mm/hr (Low), > 15mm/hr (High) | Continuous (2+ hrs) | OpenWeatherMap API | Low / Medium / High |
-| 2 | **Extreme Heat** | > 38°C (Low), > 42°C (High) | Continuous | OpenWeatherMap API | Low / Medium / High |
-| 3 | **Severe AQI** | > 150 (Medium), > 250 (High) | Continuous | AQICN / OpenWeather Air API | Medium / High |
-| 4 | **Flood Alert** | IMD Flood Alert = TRUE | Instant | IMD / NDMA (or simulated) | High / Extreme |
-| 5 | **Curfew** | Curfew Status = TRUE | Instant | Admin-verified panel | Extreme (100%) |
-| 6 | **Local Strike / Bandh** | Strike Status = TRUE | Instant | Admin-verified / News API | Extreme (100%) |
-
-**Key design decisions:**
-
-- **Instant triggers** (Flood, Curfew, Strike): These cause complete, immediate disruption. No duration check needed — the moment they are confirmed, a claim activates.
-- **Continuous triggers** (Rain, Heat, AQI): A 10-minute rain spike should not cause a payout. The condition must persist for 2+ hours to confirm genuine income impact.
-- **Multi-disruption rule:** If multiple triggers fire simultaneously, only the highest severity is used. No double payouts.
-
----
-
-### Severity → Income Loss Mapping
-
-| Severity | Income Loss % | When It Applies |
+| Trigger | Verification Method | Activation Type |
 |---|---|---|
-| Low | 20% | Light disruption — worker can still operate, just slower |
-| Medium | 50% | Significant disruption — reduced hours, fewer orders |
-| High | 80% | Major disruption — minimal work possible |
-| Extreme | 100% | Complete shutdown — Flood, Curfew, or Strike |
+| Curfew | Admin marks zone on dashboard | Instant after verification |
+| Local strike or bandh | Admin confirmation, optional news API cross-check | Instant after verification |
+
+If multiple triggers are active simultaneously, only the highest severity is applied — no double payouts.
 
 ---
 
-### Income Loss Calculation
+### Payout Calculation
 
 ```
-Expected Income  =  Average hourly income × Working hours in disruption window
+Daily loss  =  (DWI / 7)  ×  (affected hours / 9)  ×  Disruption Severity Factor
 
-Actual Income    =  What the worker earned during that period
+Payout      =  Daily loss  ×  Coverage rate
 
-Income Loss      =  Expected Income − Actual Income
+Coverage rate:
+  Primary triggers    →  0.70   (70% of daily loss)
+  Secondary triggers  →  0.50   (50% of daily loss)
 
-Payout           =  Income Loss × Severity %
+Disruption Severity Factor:
+  Low severity    →  0.50   threshold barely crossed, worker can partially operate
+  Medium severity →  0.75   significant disruption, meaningful income drop
+  High severity   →  1.00   severe conditions, near-complete halt
 ```
 
-**Worked example — Rajan, Bengaluru, Medium rain (50% severity), 3 disrupted hours:**
-```
-Expected Income  = ₹100/hr × 3 hrs = ₹300
-Actual Income    = ₹100 (earned only 1 order worth)
-Income Loss      = ₹300 − ₹100 = ₹200
-Payout           = ₹200 × 50% = ₹100
-```
-
-**Payout formula used in the system:**
-```
-Payout = (DWI / 7) × (affected_hours / 9) × DSF × trigger_rate
-
-where:
-  DWI          = Declared Weekly Income (platform-verified)
-  DSF          = Disruption Severity Factor (0.50 / 0.75 / 1.00)
-  trigger_rate = 1.00 (primary) | 0.70 (secondary triggers like curfew/strike)
-```
+**Why not 100% coverage?** Full income replacement creates no incentive to operate during mild disruptions. Trigr's 70% primary rate follows IRDAI-aligned products like PM-FASAL BIMA and WBCIS (60–80% replacement). Workers still receive meaningful compensation — a full disruption day in a Tier 1 city pays out ₹500–₹700.
 
 ---
 
-### Weekly Premium Formula
+### Payout Caps
+
+| Cap | Value | Purpose |
+|---|---|---|
+| Maximum per event | DWI daily × 1.10 | Prevents overcompensation on any single event |
+| Maximum per week | DWI × 0.60 | Moral hazard buffer |
+| Maximum per month | DWI × 2.00 | Prevents exploitation across catastrophic months |
+| Auto-payout events per month | 8 events | The 9th triggers a fraud review |
+| Payout SLA | 24 hours | UPI transfer after trigger confirmation |
+
+---
+
+### Weekly Premium
 
 ```
-Weekly Premium = EL × (1 + 0.35) × City Tier Multiplier
-
-where:
-  EL  = Expected Loss = DWI × ELR (Expected Loss Rate from CRS band)
-  0.35 = 35% loading (operations + reinsurance + margin)
+Weekly Premium  =  Expected Loss  ×  1.35  ×  City Tier Multiplier
 
 City Tier Multipliers:
-  Tier A (Mumbai, Delhi, Bengaluru)  →  1.00
-  Tier B (Hyderabad, Chennai, Pune)  →  0.92
-  Tier C (all other cities)          →  0.85
+  Tier 1 — Mumbai, Delhi, Bengaluru    →  1.00
+  Tier 2 — Hyderabad, Chennai, Pune    →  0.92
+  Tier 3 — all other enrolled cities   →  0.85
 
-Weekly change cap: ±25% (IRDAI micro-insurance alignment)
+Week-on-week change cap:  ±25%
 ```
-
-### Sample Weekly Premiums
-
-| Worker | City | Zone Risk | DWI | CRS | Est. Premium | Max Weekly Payout |
-|---|---|---|---|---|---|---|
-| Rajan | Bengaluru | High (flood-prone) | ₹5,600 | 56 (Moderate) | ₹68 | ₹4,760 |
-| Meera | Hyderabad | Moderate | ₹4,800 | 30 (Low) | ₹42 | ₹4,080 |
-| Arjun | Delhi | High (AQI season) | ₹6,000 | 70 (High) | ₹110 | ₹5,100 |
-| Priya | Vijayawada | Low | ₹3,800 | 22 (Low) | ₹35 | ₹3,230 |
-
-> **Payout cap:** Max payout per week = 85% of DWI. This prevents over-insurance and moral hazard while still providing meaningful protection.
 
 ---
 
-## 5. AI/ML Architecture
+## 5. AI and ML Architecture
+
+The CRS formula in Phase 1 uses fixed weights based on actuarial assumptions. From Phase 2 onwards, those weights are replaced by outputs from a machine learning model trained on actual claim data.
 
 ### Model 1 — Composite Risk Scorer (CRS)
 
-**Purpose:** Compute a single risk score (0–100) per worker per week. This drives both premium and payout calculations.
-
-**Four risk dimensions combined:**
-
 ```
-CRS = (0.55 × R_env + 0.15 × R_loc + 0.15 × R_act + 0.15 × R_usr) × 100
+CRS  =  (0.55 × R_env  +  0.15 × R_loc  +  0.15 × R_act  +  0.15 × R_usr)  ×  100
 
-R_env  = Environmental risk (live weather + AQI conditions)         — updated every 3 hrs
-R_loc  = Location risk (historical disruption frequency of zone)    — updated weekly
-R_act  = Activity risk (how many hours the worker is exposed)       — updated daily
-R_usr  = User history risk (claim frequency + tenure)               — updated weekly
+R_env  =  Environmental risk — live weather and AQI, updated every 3 hours
+R_loc  =  Location risk — historical disruption frequency of the zone, updated weekly
+R_act  =  Activity risk — hours worked and outdoor exposure, updated daily
+R_usr  =  User history risk — claim frequency and tenure, updated weekly
 ```
 
-**Why 55% weight on R_env?** Because bad weather is the primary cause of income loss. It is the reason this product exists. The other three dimensions provide important modulation — zone history, personal exposure, and individual claim behaviour — but no other factor comes close to real-time weather in determining weekly risk.
-
-**CRS Risk Bands:**
-
-| CRS Range | Risk Level | Expected Loss Rate | Premium Signal |
-|---|---|---|---|
-| 0–20 | Very Low | 3% | Near-floor premium |
-| 21–40 | Low | 7% | Below-average premium |
-| 41–60 | Moderate | 14% | Average premium |
-| 61–80 | High | 22% | Above-average premium |
-| 81–100 | Very High | 30% | Capped premium |
-
----
+| CRS Range | Risk Level | Expected Loss Rate |
+|---|---|---|
+| 0–20 | Very low | 3% |
+| 21–40 | Low | 7% |
+| 41–60 | Moderate | 14% |
+| 61–80 | High | 22% |
+| 81–100 | Very high | 30% |
 
 ### Model 2 — Dynamic Premium Adjuster
 
-**Purpose:** Update each worker's weekly premium every Sunday night for the coming week.
+Recalculates each worker's premium every Sunday night using the 7-day weather forecast, AQI trends, last week's platform activity, and any new claims. The ±25% cap prevents sudden large jumps.
 
-**Inputs:**
-- 7-day weather forecast (Open-Meteo free tier)
-- 7-day AQI trend
-- Worker's activity data from the past week
-- Any new claims in the past week
+### Model 3 — Work Trail Protocol (WTP)
 
-**Logic:** The ±25% weekly cap ensures workers are never hit with a sudden 2× premium spike during disruption season. Instead, if their risk profile jumps dramatically, the premium rises by at most 25% in week 1, then another 25% in week 2 if conditions persist — a smooth, predictable ramp.
+Trigr's fraud detection engine. Covered in full in Section 6. The WTP is a legitimacy-first system — it requires proof of prior work rather than attempting to detect fraud after the fact.
 
----
-
-### Model 3 — Fraud Detection Engine
-
-Detailed in [Section 6](#6-fraud-detection--anti-spoofing-strategy).
-
----
-
-### Model 4 — Predictive Disruption Forecaster (Insurer Dashboard)
-
-**Purpose:** Give insurers a 7-day forward view of likely claims exposure by zone.
+### Model 4 — Predictive Disruption Forecaster
 
 ```
-Expected Claim Exposure (zone) =
-    P(trigger fires this week)
-    × active_policies_in_zone
-    × avg_payout_per_event
+Expected claim exposure per zone
+  =  probability trigger fires this week
+     × active policies in zone
+     × average payout per event
 
-P(trigger) = weighted combination of:
-    7-day rainfall probability (OpenWeatherMap forecast)
-    AQI trend projection (5-day CPCB data)
-    Civil event calendar lookup (curfews, festivals, elections)
-    Historical same-week-of-year disruption rate
-```
-
-Dashboard output: *"Zone: Banjara Hills, Hyderabad — 62% disruption probability — Estimated exposure: ₹28,400"*
-
----
-
-## 6. Fraud Detection & Anti-Spoofing Strategy
-
-> 🚨 **Market Crash Incident:** A coordinated ring of 500 delivery partners used GPS-spoofing apps to fake their presence inside weather-alert zones. Dormant accounts were activated minutes before the trigger fired. Payouts were drained before any alert could be raised. Trigr was designed to make this attack impossible.
-
----
-
-### How We Tell a Real Worker from a GPS Spoofer
-
-Both a genuine stranded worker and a GPS spoofer will appear in the same zone at the same time. Weather data alone cannot tell them apart. Only behavioral, physical, and network signals can.
-
-| Signal | What a Genuine Worker Shows | What a GPS Spoofer Cannot Fake |
-|---|---|---|
-| **Movement Entropy** | Erratic, real-world movement — short bursts, stops, turns | Static GPS or impossibly smooth movement paths — mock app artifacts |
-| **Cell Tower Drift** | Tower IDs change naturally as worker moves through streets | Tower ID unchanged for 20+ minutes — still pinging home base |
-| **Platform Activity** | Order checks, map interactions, restaurant pings visible in logs | Flat login — no app interactions whatsoever |
-| **Historical Activity** | 30+ days of continuous delivery zone presence | Dormant account activated within 2 hours of a trigger announcement |
-| **Network Anchoring** | WiFi BSSID absent (outdoor, mobile) — IP consistent with carrier subnet | WiFi BSSID active (sitting at home) — IP from VPN |
-
-**The core rule:** If any 3 of the following 5 signals are simultaneously true, the claim is auto-escalated to HIGH RISK and frozen:
-
-```
-S1: GPS coordinate shows near-zero variance for the entire shift
-S2: Cell tower ID unchanged for > 20 minutes in a multi-tower area
-S3: Account logged in within 15 minutes of trigger announcement
-S4: Zero delivery platform interactions during claimed active window
-S5: Device WiFi is connected (genuine delivery workers are mobile)
+Inputs: 7-day rainfall probability, AQI trend projection,
+        historical disruption rate for same calendar week in prior years
 ```
 
 ---
 
-### The 5-Layer Detection System
+## 6. Fraud Detection — The Work Trail Protocol
 
-**Layer 1 — GPS Integrity Check**
-- Verify movement entropy: real workers show irregular movement patterns
-- Cross-check GPS coordinates against cell tower triangulation (±300m tolerance)
-- Detect mock app artifacts: teleportation, perfectly smooth paths, sub-meter precision
+Most parametric fraud systems ask: *"Is this claim suspicious?"* and try to score suspicion after a trigger fires. That is the wrong question. It keeps the system reactive, always one step behind a motivated attacker.
 
-**Layer 2 — Network & Device Anchoring**
-- Each login is associated with a primary home WiFi BSSID and device fingerprint
-- Two accounts sharing the same BSSID → immediate duplicate account flag
-- Emulator detection: certain device + OS combinations indicate virtual environments
+Trigr asks a fundamentally different question: **"Has this worker already proven they were working?"**
 
-**Layer 3 — Behavioral Baseline**
-- Every worker builds a rolling 30-day profile: active hours, zone history, order count
-- A user dormant for 7+ days who suddenly activates during a disruption window → anomaly flag
-- Users who only ever claim during disruptions (never show normal-day activity) → flagged
-
-**Layer 4 — External Disruption Validation**
-- Claim is cross-validated against the official parametric trigger from our engine
-- If the worker's GPS zone did NOT receive a confirmed trigger → auto-rejected
-- Prevents opportunistic claims from workers in unaffected areas
-
-**Layer 5 — Cluster & Pattern Detection**
-- Real-time monitoring of claim density per 1km × 1km geographic grid cell
-- If a zone receives > 3× its expected claim rate within a 2-hour window → Cluster Alert
-- Cross-check: are flagged accounts newly created? Do they share device signals?
+This shift is the entire foundation of the **Work Trail Protocol (WTP)**. The WTP does not detect fraud after it happens. It requires every worker to have passively accumulated an unforgeable evidence trail of legitimate work *before* a payout can ever be considered. A fraudster cannot retroactively manufacture a week of delivery history. The fraud problem is eliminated before the fraud attempt can begin.
 
 ---
 
-### Risk Score Formula
+### The Core Insight — Work Leaves Evidence That Cannot Be Faked in Bulk
+
+A genuine delivery partner on any ordinary Tuesday generates hundreds of verifiable data points without thinking about it — GPS movement near restaurants, order completion events, map API calls, active app interactions, zone entry and exit timestamps. These signals are a natural byproduct of doing the job. They accumulate passively over time and cannot be created in bulk on demand.
+
+The WTP treats this as a **passive evidence ledger** — an ongoing record that every worker builds through ordinary work. When a disruption trigger fires, the system does not ask "is this person lying?" It asks: "how deep is their evidence ledger?" A rich, consistent ledger means fast payout. A thin or empty ledger means scrutiny.
+
+The ledger is evaluated at two independent levels: **individual** (did this specific worker actually work?) and **zone** (does the population of claims from this zone look like a genuine disruption?). Both must pass. Neither can compensate for the other.
+
+---
+
+### Individual Level — Two Dimensions, One Multiplicative Score
+
+#### Dimension 1 — Temporal Depth Score (TDS)
+
+*How much legitimate work did this worker do in the 7 days before the trigger?*
+
+TDS does not count raw hours. It counts **verified work-hours** — hours where three independent signals are simultaneously present and corroborating:
 
 ```
-Risk Score = (GPS_score × 0.30) + (Network_score × 0.25) +
-             (Device_score × 0.20) + (Behavior_score × 0.15) +
-             (Cluster_score × 0.10)
+A verified work-hour requires ALL THREE of the following:
 
-Each sub-score: 0–100 (0 = clean, 100 = high suspicion)
+  (a) GPS zone presence during that hour
+  (b) At least one active platform interaction during that hour
+      — order check, map load, restaurant ping, or ETA query
+  (c) GPS movement consistent with active delivery
+      — not static, not a single background ping — measurable movement within the zone
+
+Verified work-hours across the 7 days before the trigger event  =  H_verified
+
+TDS  =  min(H_verified / 15,  1.0)     normalized to [0, 1]
+        15 verified hours = full score (1.0)
 ```
 
-| Risk Tier | Score | System Action | Worker Experience |
+Why require all three signals? GPS presence alone can be spoofed. App interactions alone can be automated. GPS movement alone could be a background process cycling coordinates. All three simultaneously, sustained across many individual hours over seven days, requires either genuine delivery work or an attack sophisticated enough to continuously simulate an active delivery worker in real time — which costs far more than any parametric payout is worth, and must be sustained indefinitely since the attacker cannot know when the next trigger will fire.
+
+| TDS | Verified Hours | What It Means | Decision Path |
 |---|---|---|---|
-| **LOW** | 0–30 | Auto-approve | Seamless — payout within 22 hours |
-| **MEDIUM** | 31–65 | Hold — OTP + identity verification | Delayed 24–48 hrs — prompted to verify |
-| **HIGH** | 66–100 | Freeze — manual review | Claim blocked — appeal path opened |
+| 1.0 | 15+ | Strong trail — consistent working pattern | Proceed to TTI |
+| 0.67–0.99 | 10–14 | Adequate trail, minor gaps | Proceed with flag |
+| 0.33–0.66 | 5–9 | Thin trail — slow week or new worker | OTP verification required |
+| 0.01–0.32 | Under 5 | Very thin — insufficient pre-event evidence | Manual review triggered |
+| 0.0 | Zero | Dormant account — no trail exists | Hard reject, no further evaluation |
+
+**TDS = 0.0 is a hard reject.** The payout engine stops immediately. No GPS check, no timing analysis, no zone evaluation, no appeal path except direct human review submission. This single gate stops every dormant-account attack before the system even processes the GPS coordinate.
 
 ---
 
-### Defending Against a Coordinated Fraud Ring
+#### Dimension 2 — Trigger Timing Index (TTI)
 
-Individual spoofers are caught by the 5-layer check. Coordinated rings require network-level detection — looking at the group, not just the individual.
+*Did the disruption find this worker working — or did the worker find the disruption?*
 
-**Ring Detection Signals:**
+Every fraud ring has an unavoidable timing problem. Fraudsters learn about a trigger from a Telegram group, a weather alert, or a news notification. Then they activate their accounts. This produces a detectable signature: the worker appeared *after* the disruption was known.
 
-- **Synchronized login storm:** 50+ accounts logging in within a 10-minute window after a trigger fires — genuine workers are already logged in before the trigger
-- **Device fingerprint clustering:** Ring members often share device models, OS versions, and app builds because they register accounts in batches
-- **BSSID collision graph:** Multiple accounts sharing the same home WiFi BSSID — physically in the same room
-- **UPI destination clustering:** If 5+ accounts route payouts to the same UPI ID, that is a confirmed ring operating under central control
-- **Claim velocity spike:** Genuine disruptions show a gradual claim rise. Ring attacks produce a vertical spike — 500 claims in 30 minutes
-
-**The Zone Radar:**
-
-| Claim Rate vs. Expected | Status | Action |
-|---|---|---|
-| 1× – 2× normal | Normal | Auto-process |
-| 2× – 3× normal | Watch | Slow-track, verify top 20% |
-| > 3× normal | Alert | Freeze zone payouts, ring investigation |
-| Vertical spike (< 30 min) | Ring Detected | Full zone freeze + escalation |
-
----
-
-### Adversarial Defense Walls
-
-**Wall 1 — Pre-Trigger Baseline Lock**
-Every account's behavioral baseline is snapshotted when a trigger fires. Accounts that came online within 2 hours of the trigger get a Suspicious Activation Flag — they had no prior signal of being in the field.
-
-**Wall 2 — Multi-Signal GPS Verification**
-Simple GPS is dead. Trigr requires GPS + cell tower + WiFi BSSID status + IP geolocation to all agree. 3 out of 4 → MEDIUM risk. 2 or fewer → HIGH risk, claim frozen.
-
-**Wall 3 — Behavioral Liveness Proof**
-The system looks for at least one delivery platform interaction during the disruption window: order view, map route load, restaurant ping, or order cancellation. A genuine worker always leaves a digital footprint. A fraudster at home shows a flat login with no activity.
-
-**Wall 4 — Real-Time Cluster Firewall**
-The payout engine enforces a per-zone velocity limit: max payouts per zone per hour = 2× the registered active worker density. When this is hit, remaining claims enter a review queue — not rejected, just held. This stops liquidity drain before it starts.
-
-**Wall 5 — Post-Payout Graph Audit**
-Every payout is mapped to its UPI ID. If 3+ worker accounts route to the same payment destination, it is flagged as a payout ring. Clawback mechanism: confirmed fraud triggers UPI blacklisting and account suspension.
-
----
-
-### Protecting Genuine Workers
-
-Aggressive fraud detection cannot punish real workers. A genuine partner in a flooded zone may have weak GPS, patchy cell signal, and zero app activity — the same signals that look suspicious.
-
-**Trusted Tier (Score 0–30 for 3+ months):**
-Workers with a long clean history are given Trusted status. Their claims are auto-approved regardless of cluster alerts in their zone. Trusted workers skip OTP verification for low-severity claims.
-
-**Appeal Mechanism:**
-Every frozen claim generates an SMS appeal token within 15 minutes. The worker can submit: a delivery platform screenshot, a short video of their surroundings, or a partner app activity log. Human review SLA: 48 hours. If upheld, payout is released. Three successful appeals → Trusted tier fast-track.
-
-**Score Decay:**
-Risk Score decays by 5 points per clean claim week. A worker who was once flagged can fully recover their standing over time. Score never decays during an active investigation.
-
-**The Core Principle:**
-> Trigr never accuses a worker. It validates a situation. An honest worker in a genuine disruption will have corroborating signals from their environment — even if their own device is unreliable. The fraud ring cannot manufacture those environmental signals.
-
----
-
-## 7. Risk Scoring & Pricing Engine
-
-### Environmental Risk (R_env)
-
-R_env captures real-time severity of weather and air quality at the worker's zone. It is the most important input — directly correlated with order cancellations and halted earnings.
+Genuine workers are caught by disruptions. The weather deteriorates while they are already on the road. They were in the zone before it was disrupted. These two scenarios produce opposite timing profiles.
 
 ```
-R_env = (w_rain × S_rain) + (w_heat × S_heat) + (w_aqi × S_aqi) + (w_flood × S_flood)
+TTI is built from two timestamps:
+
+  T_trigger   =  the moment weather data first crossed the parametric threshold
+  T_presence  =  the worker's earliest verified zone presence on the trigger day
+
+  Gap  =  T_presence − T_trigger    (minutes; negative = worker arrived before threshold)
+
+TTI:
+  Gap ≤ −30 min    worker in zone 30+ min before threshold   →  TTI = 1.00  (was already working)
+  Gap −30 to 0     worker in zone just before threshold      →  TTI = 0.85  (plausible)
+  Gap 0 to +15     entered zone within 15 min of threshold   →  TTI = 0.65  (borderline)
+  Gap +15 to +45   entered 15–45 min after threshold         →  TTI = 0.35  (suspicious)
+  Gap +45 to +90   entered 45–90 min after threshold         →  TTI = 0.15  (high suspicion)
+  Gap > +90 min    entered 90+ min after threshold           →  TTI = 0.00  (fraud pattern)
+```
+
+TTI is never used alone — a worker who genuinely started their shift late should not be penalized purely by timing. It combines with TDS multiplicatively to produce the **Individual Authenticity Score (IAS)**:
+
+```
+IAS  =  TDS × TTI     range [0, 1]
+```
+
+The multiplicative structure is intentional. A strong work history (TDS = 1.0) cannot rescue catastrophic timing (TTI = 0.0) — IAS collapses to 0. Suspicious timing (TTI = 0.15) cannot be rescued by a solid work trail (TDS = 0.8) — IAS = 0.12, frozen. Neither dimension overrides a failure in the other.
+
+| IAS | Decision |
+|---|---|
+| ≥ 0.65 | Passes to zone-level check |
+| 0.35–0.64 | OTP verification required before payout releases |
+| < 0.35 | Claim frozen — appeal token sent by SMS within 15 minutes |
+
+---
+
+### Zone Level — Zone Coherence Score (ZCS)
+
+The IAS evaluates one worker. The ZCS evaluates the *population* of claims from a zone in a single trigger event. Even if every individual claim passes IAS, the collective arrival pattern has a statistical signature that sharply distinguishes genuine mass disruptions from coordinated ring attacks.
+
+Genuine disruptions produce a characteristic claim curve: gradual onset, peak during worst conditions, slow tail as workers resume. Fraud rings produce a different signature: vertical spike, tight time window, abnormal financial topology, clustered account creation dates.
+
+ZCS measures three population signals and combines them multiplicatively — any single signal at zero collapses the entire zone score and triggers a freeze.
+
+---
+
+#### ZCS Signal A — Claim Arrival Distribution
+
+```
+For each zone, Trigr maintains a rolling baseline:
+  expected_rate  =  enrolled_workers × historical_disruption_claim_rate   (per 30-min window)
+
+Ratio of actual claims to expected within any 30-minute window:
+
+  ≤ 2× expected                →  ZCS_A = 1.0   normal disruption curve, process normally
+  2× to 3× expected            →  ZCS_A = 0.6   elevated, monitor
+  3× to 5× expected            →  ZCS_A = 0.2   abnormal, slow-track all zone claims
+  > 5× expected OR             →  ZCS_A = 0.0   zone freeze — no individual IAS evaluated
+  vertical spike under 30 min
+```
+
+#### ZCS Signal B — Financial Topology
+
+In a genuine disruption, payout destinations are nearly uniformly distributed — each of N workers has a distinct UPI ID. Fraud rings consolidate: the organizer needs to collect, so multiple accounts route to few destinations.
+
+```
+Concentration ratio  =  unique UPI IDs in this event / total claims in this event
+
+≥ 0.95               →  ZCS_B = 1.0   healthy dispersion, one ID per worker
+0.80–0.94            →  ZCS_B = 0.7   minor clustering, monitor
+0.50–0.79            →  ZCS_B = 0.3   significant clustering, all shared IDs flagged
+< 0.50               →  ZCS_B = 0.0   ring financial topology confirmed
+```
+
+#### ZCS Signal C — Account Age Distribution
+
+Legitimate workers have spread tenure — enrolled across many weeks or months. Fraud rings recruit in batches just before a forecasted event: account creation timestamps cluster in a narrow window.
+
+```
+New account ratio  =  accounts registered within 7 days of trigger / total claimants
+
+< 0.10               →  ZCS_C = 1.0   healthy age spread
+0.10–0.20            →  ZCS_C = 0.7   mild surge, normal during growth phases
+0.20–0.40            →  ZCS_C = 0.3   recruitment spike, all new accounts flagged
+> 0.40               →  ZCS_C = 0.0   ring recruitment pattern confirmed
+```
+
+#### Zone Coherence Score
+
+```
+ZCS  =  ZCS_A × ZCS_B × ZCS_C     range [0, 1]
+
+Multiplicative — any single signal at 0.0 collapses the zone to a full freeze.
+
+ZCS ≥ 0.5     zone coherent — process individual claims by IAS
+ZCS 0.2–0.49  zone under review — all claims slow-tracked pending investigation
+ZCS < 0.2     zone freeze — no payouts released, insurer dashboard alerted immediately
+```
+
+---
+
+### The WTP Decision Matrix
+
+```
+Evaluated strictly in order — first match wins:
+
+  1. TDS = 0.0                         →  HARD REJECT    (no further evaluation)
+  2. ZCS < 0.2                         →  ZONE FREEZE    (no individual scores evaluated)
+  3. IAS ≥ 0.65  AND  ZCS ≥ 0.5       →  AUTO-APPROVE   (UPI payout within 24 hours)
+  4. IAS ≥ 0.35  OR   ZCS ≥ 0.2       →  OTP VERIFY     (payout within 48 hours on confirm)
+  5. All other                         →  FROZEN          (SMS appeal token, human review 48hrs)
+```
+
+| Outcome | Worker Experience | Expected Share of Genuine Claims |
+|---|---|---|
+| Auto-approve | Payout to UPI within 24 hours, zero action needed | ~78% |
+| OTP verify | SMS prompt, confirm identity, payout within 48 hours | ~18% |
+| Frozen | SMS appeal token, submit evidence, human review within 48 hours | ~4% |
+
+---
+
+### Verified Carrier Status
+
+Workers who accumulate 90+ days of continuous clean claim history earn **Verified Carrier** status. Their TDS from the prior 90 days acts as a standing baseline — a Verified Carrier who had a genuinely thin week due to illness or personal circumstances is not penalized by that single week, because their longer history provides the evidence their current ledger cannot.
+
+Verified Carriers are processed through a separate trusted queue that is immune to zone-level freezes. When a ring attack triggers a ZCS collapse, Verified Carriers in that zone still receive their payouts within 24 hours.
+
+Status is earned only through sustained legitimate work. It cannot be purchased, transferred, or manufactured.
+
+---
+
+### What the WTP Makes Impossible
+
+To defeat the WTP, a fraud ring must simultaneously satisfy all of the following:
+
+1. **Register accounts well in advance** — not 72 hours before a target event but weeks prior, destroying the ZCS_C leverage
+2. **Have those accounts perform genuine delivery work** — 15+ verified hours weekly, ongoing and indefinitely, on the chance a trigger fires in their zone this particular week
+3. **Enter the target zone before the threshold crosses** — requiring the ring to predict the exact minute a parametric threshold is breached, not just the general weather forecast
+4. **Keep all UPI destinations unique** — abandoning financial consolidation entirely, making the operation economically unviable for any organizer
+
+Satisfying all four conditions simultaneously is operationally indistinguishable from running a legitimate delivery workforce. The attack either becomes real delivery work, or it fails the WTP.
+
+---
+
+## 7. 🚨 Market Crash Defense
+
+### The Attack
+
+500 dormant accounts. GPS spoofed into an active weather-alert zone in Banjara Hills. All 500 claims filed within 18 minutes of the trigger announcement. The goal: drain the zone's insurance pool before the system responds.
+
+---
+
+### How the WTP Stops It — Decision by Decision
+
+**Step 1 — TDS kills all 500 claims before anything else runs.**
+
+Every account is dormant. Zero verified work-hours in the prior 7 days. TDS = 0.0 for all 500. The WTP hard reject fires immediately. The payout engine never reaches GPS validation, timing checks, zone scoring, or ring detection. The insurance pool is never touched.
+
+```
+500 accounts  ×  TDS = 0.0  →  500 hard rejects
+Computation time: milliseconds
+Pool drained: ₹0
+```
+
+**Step 2 — TTI confirms the pattern (redundant catch for any account that somehow had TDS > 0).**
+
+All 500 accounts logged in after the trigger threshold crossed and was publicly known. Gap > +90 minutes for all accounts. TTI = 0.0. IAS = TDS × 0.0 = 0.0. Frozen — independently.
+
+**Step 3 — ZCS collapses independently, triggering zone freeze regardless.**
+
+Even if individual IAS scores had somehow passed:
+
+- 500 claims arrive in 18 minutes against an expected baseline of ~35 claims/hour → ZCS_A = 0.0 → zone freeze
+- Claims routing to under 30 unique UPI IDs across 500 accounts → concentration ratio = 0.06 → ZCS_B = 0.0
+- 340+ accounts registered within 72 hours of trigger → new account ratio = 0.68 → ZCS_C = 0.0
+
+ZCS = 0.0 × 0.0 × 0.0 = 0.0. Full zone freeze. Insurer dashboard receives an immediate ring-attack alert including the complete UPI topology graph — which destination IDs are at the center of the ring and every account linked to each.
+
+**Step 4 — The ring's financial structure becomes permanent evidence.**
+
+Every UPI ID identified in the topology is flagged for blacklisting. Every account connected to those destinations — across all zones, not just Banjara Hills — is suspended pending investigation. The ring is not just stopped; it is identified and dismantled.
+
+---
+
+### Meera Is Not Caught in the Freeze
+
+Meera has been working Banjara Hills for 4 months. She was already online at 10 AM and three orders into her shift when the rainfall threshold crossed at 2 PM.
+
+```
+Meera's WTP evaluation:
+
+  H_verified in prior 7 days:  52 hours, all three signals present each hour
+  TDS:  min(52 / 15, 1.0) = 1.0
+
+  T_trigger:    2:00 PM (threshold crossed)
+  T_presence:   10:00 AM (Meera's first zone presence on trigger day)
+  Gap:          −240 minutes (she was in zone 4 hours before trigger)
+  TTI:          1.0
+
+  IAS:          1.0 × 1.0  =  1.0
+
+  ZCS:          Zone frozen due to ring attack
+  Override:     Meera holds Verified Carrier status (4 months clean record)
+                → processed from Trusted queue, isolated from frozen zone batch
+
+Result:  ₹350 payout to UPI within 24 hours.
+Ring:    ₹0 paid out. Ring accounts suspended. UPI topology logged.
+```
+
+---
+
+### The Adversarial Asymmetry Table
+
+| What the ring must do to defeat WTP | Why it fails |
+|---|---|
+| Build 500 accounts with TDS ≥ 0.67 | Requires 500 people doing real delivery work 10+ hours/week indefinitely |
+| Achieve TTI > 0.35 for all accounts | Requires predicting exact parametric threshold crossing times hours in advance |
+| Keep ZCS_B above 0.5 | Requires 250+ unique UPI IDs — destroys consolidation, making the ring uneconomical to operate |
+| Avoid ZCS_A spike | Requires spreading 500 claims over several hours — giving the system investigation time |
+| Avoid ZCS_C flag | Requires registering accounts weeks in advance — enormous lead time for uncertain payout |
+
+Every countermeasure the ring takes against the WTP makes the ring either more expensive, more operationally complex, or more detectable. The protocol is adversarially robust not because it catches fraud — but because it makes fraud economically irrational before it starts.
+
+---
+
+## 8. Risk Scoring and Pricing Engine
+
+### Environmental Risk — R_env
+
+```
+R_env  =  (w_rain × S_rain) + (w_heat × S_heat) + (w_aqi × S_aqi) + (w_flood × S_flood)
 
 Signal normalization:
-  S_rain  = min((mm_per_day − 15) / 100, 1.0)    [threshold: 15mm/day]
-  S_heat  = min((°C − 38) / 10, 1.0)             [threshold: 38°C]
-  S_aqi   = min((AQI − 150) / 250, 1.0)          [threshold: AQI 150]
-  S_flood = 0 / 0.5 / 1.0                        [Green / Orange / Red alert]
+  S_rain   =  min((rainfall mm/day − 15) / 100,   1.0)
+  S_heat   =  min((temperature °C − 38) / 10,     1.0)
+  S_aqi    =  min((AQI − 150) / 250,              1.0)
+  S_flood  =  0 / 0.5 / 1.0   for Green / Orange / Red alert
 ```
 
-**City-specific environmental weights** (derived from 10-year IMD historical data):
+City-specific weights reflect each city's dominant historical hazard:
 
-| City | w_rain | w_heat | w_aqi | w_flood | Dominant Hazard |
+| City | w_rain | w_heat | w_aqi | w_flood | Main Hazard |
 |---|---|---|---|---|---|
-| Mumbai | 0.50 | 0.10 | 0.15 | 0.25 | Heavy monsoon + coastal flood |
-| Delhi | 0.10 | 0.30 | 0.45 | 0.15 | Severe winter AQI + summer heat |
-| Bengaluru | 0.50 | 0.20 | 0.20 | 0.10 | Year-round rain + waterlogging |
-| Hyderabad | 0.40 | 0.35 | 0.15 | 0.10 | Heat waves + erratic rain |
-| Chennai | 0.45 | 0.30 | 0.10 | 0.15 | NE monsoon + high heat |
+| Mumbai | 0.50 | 0.10 | 0.15 | 0.25 | Monsoon and coastal flooding |
+| Delhi | 0.10 | 0.30 | 0.45 | 0.15 | Winter AQI and summer heat |
+| Bengaluru | 0.50 | 0.20 | 0.20 | 0.10 | Year-round rain and waterlogging |
+| Hyderabad | 0.40 | 0.35 | 0.15 | 0.10 | Heat waves and erratic rainfall |
+| Chennai | 0.45 | 0.30 | 0.10 | 0.15 | Northeast monsoon and high heat |
 
----
-
-### Location Risk (R_loc)
-
-R_loc reflects how historically disruption-prone a worker's zone is — independent of what the weather is doing right now.
+### Location Risk — R_loc
 
 ```
-R_loc = (zone_flood_index × 0.5) + (zone_disruption_frequency × 0.5)
+R_loc  =  (zone flood index × 0.5) + (zone disruption frequency × 0.5)
 ```
 
-Workers who operate in multiple zones in a week get the highest R_loc among their active zones. This updates weekly.
+Workers active in multiple zones during a week take the highest R_loc among those zones.
 
----
-
-### Activity Risk (R_act)
-
-R_act captures outdoor exposure. A worker clocking 70 hours/week in peak summer Delhi faces more income-loss risk than one working 20 hours. This also prevents over-charging workers who naturally reduce hours during bad weather.
+### Activity Risk — R_act
 
 ```
-R_act = min((hours_this_week / 60) × zone_exposure_factor × segment_multiplier, 1.0)
+R_act  =  min((hours this week / 60) × zone exposure factor × 1.10,   1.0)
 
-segment_multiplier (Food Delivery) = 1.10
-  [Outdoor, time-sensitive, cannot skip or delay orders]
+Food delivery segment multiplier: 1.10
+Maximum expected weekly hours cap: 60
 ```
 
----
-
-### User History Risk (R_usr)
-
-R_usr is the only sub-score a worker directly controls. Workers who stay claim-free over time earn progressively lower premiums. New workers start with a moderate unknown-history score that decays toward zero as they build a clean record.
+### User History Risk — R_usr
 
 ```
-R_usr = (claim_frequency_score × 0.60) + (low_tenure_score × 0.40)
+R_usr  =  (claim frequency score × 0.60) + (low tenure score × 0.40)
 
-claim_frequency_score = min(claims_past_6_weeks / 4, 1.0)
-low_tenure_score      = max(0, 1 − (tenure_weeks / 26))
+claim frequency score  =  min(claims in past 6 weeks / 4,   1.0)
+low tenure score       =  max(0,   1 − tenure weeks / 26)
 ```
 
----
+A new worker starts at R_usr of 0.40. After six months of clean claims it approaches zero, visible in the app as a growing loyalty discount.
 
-### Full Worked Example — Rajan, Bengaluru, Week 3 of Monsoon
+### Full Worked Example — Rajan, Bengaluru, Monsoon Week
 
-| Input | Value | Normalized Score |
+| Input | Raw Value | Normalized Score |
 |---|---|---|
-| Rainfall (Mumbai weights) | 82mm/day | S_rain = 0.67 |
+| Rainfall | 82mm/day | S_rain = 0.67 |
 | Temperature | 33°C | S_heat = 0.00 (below threshold) |
 | AQI | 95 | S_aqi = 0.00 (below threshold) |
 | Flood alert | Orange | S_flood = 0.50 |
-| R_env (Bengaluru weights) | — | **0.46** |
-| R_loc (flood-prone zone) | — | **0.62** |
-| R_act (52 hrs, food delivery) | — | **0.96** |
-| R_usr (1 claim in 6 wks, 14 wk tenure) | — | **0.49** |
+| R_env (Bengaluru weights) | — | 0.46 |
+| R_loc (flood-prone zone) | — | 0.62 |
+| R_act (52 hours, food delivery) | — | 0.96 |
+| R_usr (1 claim in 6 weeks, 14-week tenure) | — | 0.49 |
 
 ```
-CRS = (0.55 × 0.46 + 0.15 × 0.62 + 0.15 × 0.96 + 0.15 × 0.49) × 100
-    = (0.253 + 0.093 + 0.144 + 0.074) × 100
-    = 56.4 → Moderate Risk Band
-```
+CRS  =  (0.55 × 0.46 + 0.15 × 0.62 + 0.15 × 0.96 + 0.15 × 0.49) × 100
+     =  56.4   →  Moderate risk band
 
-```
-EL  = DWI × ELR = ₹5,600 × 14% = ₹784
-P   = ₹784 × 1.35 × 1.00 (Tier A) = ₹1,058
-
-With ±25% cap applied from previous week: final premium = ~₹1,058
+Expected Loss   =  ₹5,600 × 14%  =  ₹784
+Weekly Premium  =  ₹784 × 1.35 × 1.00  =  ₹1,058
 ```
 
 ---
 
-## 8. Tech Stack & System Design
+## 9. Tech Stack
 
-### Architecture Overview
+**Frontend**
+React 18 with TypeScript and Vite, Tailwind CSS with shadcn/ui, Recharts for analytics, Leaflet.js for zone heatmaps.
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    WEB FRONTEND                             │
-│   React 18 + TypeScript + Vite                              │
-│   Tailwind CSS + shadcn/ui                                  │
-│   Recharts (analytics) + Leaflet.js (zone heatmaps)         │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ REST + WebSocket
-┌──────────────────────▼──────────────────────────────────────┐
-│                    BACKEND CORE                             │
-│   Python FastAPI (async)                                    │
-│   APScheduler — trigger monitor every 15 min per zone      │
-│   JWT Auth + phone OTP (workers) + email (insurers)         │
-└──────────┬──────────────┬────────────────┬──────────────────┘
-           │              │                │
-┌──────────▼────┐ ┌───────▼──────┐ ┌──────▼──────────────────┐
-│  PostgreSQL   │ │    Redis     │ │     ML Microservice      │
-│  (Supabase)   │ │  session +   │ │  FastAPI + XGBoost       │
-│  workers      │ │  trigger     │ │  + scikit-learn          │
-│  policies     │ │  state +     │ │                          │
-│  claims       │ │  queue       │ │  CRS Risk Scorer         │
-│  payouts      │ └──────────────┘ │  Dynamic Premium Engine  │
-│  zones        │                  │  Fraud Detection Engine  │
-└───────────────┘                  │  Disruption Forecaster   │
-                                   └─────────────────────────┘
-                       │
-┌──────────────────────▼──────────────────────────────────────┐
-│                 EXTERNAL INTEGRATIONS                       │
-│  OpenWeatherMap API     — rainfall + temperature triggers   │
-│  AQICN / OpenWeather Air — AQI triggers                     │
-│  IMD / NDMA             — flood alerts (mock in Phase 1)    │
-│  Admin Panel            — curfew / strike activation        │
-│  Razorpay Test Mode     — UPI payout simulation             │
-│  Platform Mock API      — worker activity + GPS data        │
-└─────────────────────────────────────────────────────────────┘
-```
+**Backend**
+Python FastAPI (async), APScheduler running the trigger monitor every 15 minutes per zone, JWT authentication with phone OTP for workers.
+
+**Database and Cache**
+PostgreSQL via Supabase, Redis for trigger state management and claim queuing.
+
+**ML Service**
+FastAPI microservice running XGBoost for CRS risk weight tuning, scikit-learn for premium regression, and an Isolation Forest model for ZCS anomaly detection on zone-level claim populations.
+
+**External Integrations**
+OpenWeatherMap for rainfall and temperature, AQICN and OpenWeather Air for AQI readings, IMD and NDMA for flood alerts (simulated in Phase 1), Razorpay test mode for UPI payout simulation, platform mock API for worker activity and GPS data.
 
 ### Core Database Schema
 
 ```sql
--- Workers
-workers (
-  id, phone_hash VARCHAR UNIQUE,   -- hashed for privacy
-  name, zone_id FK,
-  platform ENUM(zomato, swiggy),
-  declared_weekly_hours INT,
-  avg_hourly_income DECIMAL,
-  crs_score DECIMAL,
-  upi_id_encrypted VARCHAR,
-  tenure_weeks INT,
-  trusted_status BOOLEAN
-)
+workers        (id, phone_hash, zone_id, platform, weekly_hours,
+                avg_income, crs_score, upi_id_encrypted, tenure_weeks,
+                verified_carrier, tds_rolling, last_active_timestamp)
 
--- Policies (weekly)
-policies (
-  id, worker_id FK, zone_id FK,
-  week_start DATE, week_end DATE,
-  premium_paid DECIMAL,
-  coverage_cap DECIMAL,
-  status ENUM(active, expired, skipped)
-)
+policies       (id, worker_id, week_start, week_end,
+                premium_paid, coverage_cap, status)
 
--- Trigger events (zone-level)
-trigger_events (
-  id, zone_id FK,
-  trigger_type ENUM(rain, heat, aqi, flood, curfew, strike),
-  severity ENUM(low, medium, high, extreme),
-  start_time TIMESTAMP, end_time TIMESTAMP,
-  trigger_type_logic ENUM(instant, continuous),
-  data_sources JSONB,    -- full audit trail of API sources used
-  verified BOOLEAN
-)
+trigger_events (id, zone_id, trigger_type, trigger_category,
+                severity, start_time, end_time, data_sources,
+                verified, threshold_crossed_at)
 
--- Claims (auto-generated — never manually filed)
-claims (
-  id, policy_id FK, trigger_event_id FK,
-  disrupted_hours DECIMAL,
-  expected_income DECIMAL,
-  actual_income DECIMAL,
-  payout_amount DECIMAL,
-  fraud_score DECIMAL,
-  fraud_flags JSONB,
-  status ENUM(auto_approved, review, rejected, paid)
-)
+work_ledger    (id, worker_id, date_hour, gps_present,
+                app_interaction, movement_confirmed,
+                verified_hour, zone_id)
 
--- Payouts
-payouts (
-  id, claim_id FK, worker_id FK,
-  amount DECIMAL,
-  razorpay_ref VARCHAR,
-  status ENUM(initiated, success, failed),
-  paid_at TIMESTAMP
-)
+claims         (id, policy_id, trigger_event_id, disrupted_hours,
+                expected_income, payout_amount,
+                tds_score, tti_score, ias_score, zcs_score,
+                decision, freeze_reason)
 
--- Zones
-zones (
-  id, pincode, city, city_tier,
-  flood_incident_count INT,
-  disruption_frequency DECIMAL,
-  r_loc_score DECIMAL,
-  env_weights JSONB,    -- city-specific R_env weights
-  last_updated TIMESTAMP
-)
-```
+payouts        (id, claim_id, worker_id, amount, razorpay_ref, paid_at)
 
-### Why These Technology Choices
+zones          (id, pincode, city, tier, flood_index,
+                disruption_frequency, r_loc_score, env_weights,
+                expected_claim_rate, freeze_active)
 
-**FastAPI (Python):** Async-first, perfect for a trigger monitor that runs concurrent zone checks every 15 minutes. Integrates naturally with our Python ML models.
-
-**Supabase (PostgreSQL):** Built-in phone OTP auth for worker onboarding, Realtime subscriptions for the insurer's live trigger feed, and auto-generated REST APIs — significantly reduces backend boilerplate.
-
-**Redis:** Handles trigger state (has rain been continuous for 2+ hours in zone X?) and claim queuing without database round-trips.
-
-**XGBoost / scikit-learn:** Gradient Boosted Regressors for the dynamic premium adjuster; Isolation Forest for Phase 3 fraud ring detection at the cluster level.
-
----
-
-## 9. Development Roadmap
-
-### Phase 1 — Seed (Weeks 1–2, March 20 deadline) ← *Current*
-
-```
-✅ Problem analysis + food delivery persona research
-✅ 6 parametric triggers defined with exact thresholds
-✅ Severity × income loss mapping documented
-✅ CRS formula and all 4 risk dimensions designed
-✅ Premium model (linear + geometric) documented
-✅ 5-layer fraud detection system designed
-✅ Market Crash adversarial defense documented
-✅ Full payout formula with eligibility gates defined
-[ ] GitHub repo setup + project scaffold (FastAPI + React)
-[ ] OpenWeatherMap + AQICN API connection (mock data layer)
-[ ] CRS computation module (Phase 1: mock inputs)
-[ ] Basic premium calculation function
-[ ] Supabase project setup — schema creation + seed data
-[ ] 2-minute strategy video
-```
-
-### Phase 2 — Scale (Weeks 3–4, April 4 deadline)
-
-```
-[ ] Worker registration + onboarding flow
-[ ] Weekly opt-in flow with premium deduction
-[ ] All 6 triggers wired to real + mock APIs
-[ ] Dynamic premium calculation (all 4 CRS components live)
-[ ] Auto-claim generation engine (zero manual filing)
-[ ] Layer 1–3 Fraud Detection (GPS + network + behavioral)
-[ ] Razorpay test mode payout
-[ ] Insurer dashboard v1 (active policies, live trigger feed)
-[ ] 2-minute demo video
-```
-
-### Phase 3 — Soar (Weeks 5–6, April 17 deadline)
-
-```
-[ ] Layer 4–5 Fraud Detection (cluster detection + post-payout graph audit)
-[ ] 7-Day Disruption Forecaster on insurer dashboard
-[ ] Zone risk heatmap (Leaflet.js)
-[ ] Advanced fraud: GPS spoofing fingerprint detection
-[ ] End-to-end disruption simulation demo (rainstorm → trigger → payout)
-[ ] Worker dashboard: earnings protected, active coverage summary
-[ ] Insurer dashboard: loss ratios + predictive analytics
-[ ] Final pitch deck (PDF)
-[ ] 5-minute demo video
+fraud_events   (id, zone_id, trigger_event_id,
+                zcs_a, zcs_b, zcs_c, zcs_final,
+                accounts_flagged, upi_topology_json,
+                ring_confirmed, insurer_alerted_at, resolution_status)
 ```
 
 ---
 
-## Why Trigr Wins
+## 10. Development Roadmap
 
-| What Generic Insurance Offers | What Trigr Builds |
-|---|---|
-| Workers must file a claim | Workers receive a payout before they ask |
-| City-level weather data | Zone-level CRS with city-specific environmental weights |
-| Static monthly premiums | Dynamic weekly premiums that adjust for next week's forecast |
-| Weather API only | Weather + AQI + Flood alerts + Admin-verified social triggers |
-| Binary payout or nothing | Proportional payouts tied to disruption severity and actual hours lost |
-| GPS check only | 5-layer multi-signal fraud detection + coordinated ring radar |
-| One-size-fits-all pricing | City tier multipliers + user history rewards for clean claimants |
+### Phase 1 — Seed (Weeks 1–2, deadline March 20) ✅
 
-> *Trigr doesn't ask delivery partners to prove they lost income. It watches the world on their behalf — and pays before they even think to ask.*
+- Food delivery persona research and city-tier income analysis
+- Six parametric triggers defined with exact thresholds
+- Primary vs secondary trigger architecture documented
+- CRS formula and all four risk dimensions designed
+- Weekly premium model documented
+- Payout formula with 70% and 50% coverage rates
+- Work Trail Protocol — TDS, TTI, IAS, ZCS architecture fully designed
+- Market Crash adversarial defense documented
+- Community pricing and zone fairness model defined
+- GitHub repository setup and project scaffold
+- CRS computation module with mock inputs
+- Basic premium calculation function
+- Supabase schema creation and seed data
+- 2-minute strategy video
+
+### Phase 2 — Scale (Weeks 3–4, deadline April 4)
+
+Worker registration and weekly opt-in flow, all six triggers wired to real and mock APIs, dynamic premium calculation with all four CRS components live, auto-claim generation engine with zero manual filing, WTP Dimensions 1 and 2 live (TDS hard gate + TTI scoring), work ledger table populated from platform mock API, Razorpay test mode payout, insurer dashboard version one, 2-minute demo video.
+
+### Phase 3 — Soar (Weeks 5–6, deadline April 17)
+
+ZCS zone-level coherence scoring with Isolation Forest anomaly detection, Verified Carrier queue and trusted processing path, 7-day disruption forecaster on insurer dashboard, zone risk heatmap, full end-to-end disruption simulation demo, worker dashboard showing earnings protected and active coverage, insurer dashboard with loss ratios and ring-attack alert timeline, final pitch deck, 5-minute demo video.
 
 ---
 
-## 10. Team
-
-| Member | Role | Contribution |
-|---|---|---|
-| Member 1 | Persona & Activity | Delivery partner identity, daily workflow, income model, city-tier analysis, activity tracking |
-| Member 2 | Disruption Modeling | Parametric triggers, severity thresholds, income loss mapping, trigger logic |
-| Member 3 | Fraud & Fairness | 5-layer fraud detection, adversarial defense walls, Market Crash response, risk scoring |
-| Member 4 | Risk & Pricing | CRS formula, premium model, payout engine, eligibility gates, regulatory alignment |
-
----
-
-## 🔗 Links
+## Links
 
 | Resource | Link |
 |---|---|
-| GitHub Repository | *[Link to be added]* |
-| Phase 1 Demo Video | *[Link to be added]* |
-| Live Demo | *[Phase 2]* |
-| Insurer Dashboard | *[Phase 2]* |
+| GitHub Repository | To be added |
+| Phase 1 Demo Video | To be added |
+| Live Demo | Phase 2 |
+| Insurer Dashboard | Phase 2 |
 
 ---
 
