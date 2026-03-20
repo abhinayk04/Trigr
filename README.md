@@ -12,7 +12,7 @@ India has over 5 million food delivery partners working for Zomato and Swiggy. O
 
 Heavy rain slows orders. Extreme heat makes outdoor work unsafe. Severe pollution forces workers off the road. A flood blocks every route. A curfew or local strike brings deliveries to a complete halt.
 
-These are not rare events — they are the lived reality of every gig worker in India. A disruption week can erase 20-30% of a Zomato partner's monthly income. And when it happens, they have absolutely nothing to fall back on. No sick leave. No employer liability. No safety net.
+These are not rare events — they are the lived reality of every gig worker in India. A disruption week can erase 30-40% of a Zomato partner's monthly income. And when it happens, they have absolutely nothing to fall back on. No sick leave. No employer liability. No safety net.
 
 **Trigr changes that.**
 
